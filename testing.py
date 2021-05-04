@@ -2,6 +2,7 @@ import tensorflow_datasets as tfds
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+
 def plot_graphs(history, metric):
   plt.plot(history.history[metric])
   plt.plot(history.history['val_'+metric], '')
@@ -42,10 +43,19 @@ test_dataset = test_dataset.padded_batch(BATCH_SIZE)
 
 model = tf.keras.Sequential([
     tf.keras.layers.Embedding(encoder.vocab_size, 64),
+    tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64,  return_sequences=True)),
+    tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(32)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    #tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(1)
+])
+
+'''model = tf.keras.Sequential([
+    tf.keras.layers.Embedding(encoder.vocab_size, 64),
     tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64)),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(1)
-])
+])'''
 
 
 model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
@@ -54,7 +64,7 @@ model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
 
 
 history = model.fit(train_dataset, epochs=10,
-                    validation_data=test_dataset, 
+                    validation_data=test_dataset,
                     validation_steps=30)
 
 test_loss, test_acc = model.evaluate(test_dataset)
