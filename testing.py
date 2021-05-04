@@ -54,7 +54,7 @@ model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
 
-history = model.fit(train_dataset, epochs=10,
+history = model.fit(train_dataset, epochs=15,
                     validation_data=test_dataset, 
                     validation_steps=30)
 
