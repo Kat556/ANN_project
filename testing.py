@@ -1,6 +1,10 @@
 import tensorflow_datasets as tfds
 import tensorflow as tf
 import matplotlib.pyplot as plt
+<<<<<<< Updated upstream
+=======
+import os
+>>>>>>> Stashed changes
 
 def plot_graphs(history, metric):
   plt.plot(history.history[metric])
@@ -42,15 +46,25 @@ test_dataset = test_dataset.padded_batch(BATCH_SIZE)
 
 model = tf.keras.Sequential([
     tf.keras.layers.Embedding(encoder.vocab_size, 64),
+<<<<<<< Updated upstream
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(1)
+=======
+    tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64,  return_sequences=True)),
+    tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(32)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(1)
+
+>>>>>>> Stashed changes
 ])
 
 
 model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-              optimizer=tf.keras.optimizers.Adam(1e-4),
+              optimizer=tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.8, nesterov=True),
               metrics=['accuracy'])
 
 
@@ -93,3 +107,5 @@ print(predictions)
 
 plot_graphs(history, 'accuracy')
 plot_graphs(history, 'loss')
+
+os.system("pause")
